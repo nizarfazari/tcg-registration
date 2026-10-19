@@ -1,18 +1,26 @@
 /**
- * Buat script ini dari spreadsheet tujuan (Extensions > Apps Script).
- * Kolom tambahan yang disarankan: Email dan Jenis TCG.
+ * Script ini dibuat dari spreadsheet tujuan (Extensions > Apps Script).
+ * Urutan data form: Timestamp, Nama, Player Name, WhatsApp, Komunitas,
+ * Leader/Pokémon, Deck, Status Deck, Konfirmasi, Email, Jenis TCG.
  */
 function doPost(e) {
   try {
     const data = e.parameter;
-    const duplicate = findDuplicates_(data.email, data.phone, data.game);
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+    const duplicate = findDuplicates_(sheet, data.email, data.phone, data.game);
     if (duplicate.email || duplicate.phone) {
       return response_({ ok: false, duplicate: duplicate });
     }
 
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+    // Tulis tanggal sebagai teks agar spreadsheet tidak mengubah data lain menjadi format jam.
+    const timestamp = Utilities.formatDate(
+      new Date(),
+      Session.getScriptTimeZone(),
+      'dd/MM/yyyy HH:mm:ss'
+    );
+    // Satu operasi tulis ke spreadsheet.
     sheet.appendRow([
-      new Date(), data.fullName || '', data.playerName || '', data.phone || '',
+      timestamp, data.fullName || '', data.playerName || '', data.phone || '',
       data.community || '', data.leader || '', data.deck || '',
       data.hasDeck === 'ready' ? 'Ya, sudah siap' : 'Sedang mempersiapkan deck',
       'Saya bersedia hadir sesuai jadwal, mengikuti ketentuan panitia, dan menerima informasi terkait turnamen melalui WhatsApp.',
@@ -24,36 +32,22 @@ function doPost(e) {
   }
 }
 
-// Dicek dari halaman form sebelum dikirim agar peserta langsung mendapat pesan.
-function doGet(e) {
-  if (e.parameter.action !== 'check-registration') return response_({ ok: true });
-  const callback = String(e.parameter.callback || '').replace(/[^a-zA-Z0-9_$]/g, '');
-  const result = findDuplicates_(e.parameter.email, e.parameter.phone, e.parameter.game);
-  if (!callback) return response_(result);
-  return ContentService.createTextOutput(callback + '(' + JSON.stringify(result) + ')')
-    .setMimeType(ContentService.MimeType.JAVASCRIPT);
-}
-
-function findDuplicates_(email, phone, game) {
+function findDuplicates_(sheet, email, phone, game) {
   const normalizedEmail = String(email || '').trim().toLowerCase();
   const normalizedPhone = String(phone || '').replace(/\D/g, '');
   const normalizedGame = String(game || '').trim().toLowerCase();
-  if (!normalizedGame) return { email: false, phone: false };
+  const lastRow = sheet.getLastRow();
+  if (!normalizedGame || lastRow < 2) return { email: false, phone: false };
 
-  const rows = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0].getDataRange().getDisplayValues();
-  if (rows.length < 2) return { email: false, phone: false };
-  const headers = rows[0].map(String);
-  // Data dari form custom ditulis: nomor HP di kolom D, Email di J, Jenis TCG di K.
-  const phoneColumn = headers.indexOf('Nomor WhatsApp Aktif') >= 0 ? headers.indexOf('Nomor WhatsApp Aktif') : 3;
-  const emailColumn = headers.indexOf('Email') >= 0 ? headers.indexOf('Email') : 9;
-  const gameColumn = headers.indexOf('Jenis TCG') >= 0 ? headers.indexOf('Jenis TCG') : 10;
+  // Satu pembacaan ringan: hanya kolom D–K, bukan seluruh spreadsheet.
+  // D=WhatsApp, J=Email, K=Jenis TCG.
+  const rows = sheet.getRange(2, 4, lastRow - 1, 8).getDisplayValues();
   let duplicateEmail = false;
   let duplicatePhone = false;
-
-  rows.slice(1).forEach((row) => {
-    if (String(row[gameColumn] || '').trim().toLowerCase() !== normalizedGame) return;
-    if (normalizedEmail && String(row[emailColumn] || '').trim().toLowerCase() === normalizedEmail) duplicateEmail = true;
-    if (normalizedPhone && String(row[phoneColumn] || '').replace(/\D/g, '') === normalizedPhone) duplicatePhone = true;
+  rows.forEach((row) => {
+    if (String(row[7] || '').trim().toLowerCase() !== normalizedGame) return;
+    if (normalizedEmail && String(row[6] || '').trim().toLowerCase() === normalizedEmail) duplicateEmail = true;
+    if (normalizedPhone && String(row[0] || '').replace(/\D/g, '') === normalizedPhone) duplicatePhone = true;
   });
   return { email: duplicateEmail, phone: duplicatePhone };
 }
