@@ -66,7 +66,7 @@ export default function Home() {
     return <main className="game-gate">
       {notice && <div className={`notice ${notice.type}`} role="status">{notice.text}</div>}
       <section className="gate-copy">
-        <div className="brand"><span>CZ</span> CARD ZONE <small>TCG</small></div>
+        <div className="brand"><img className="brand-icon" src="/images/icon-tcg.png" alt="Card Zone TCG" /> CARD ZONE <small>TCG</small></div>
         <p className="eyebrow">REGISTRATION FORM</p>
         <h1>Pilih TCG<br />untuk turnamenmu</h1>
         <p className="muted">Pilih satu permainan untuk melanjutkan ke formulir pendaftaran.</p>
@@ -86,7 +86,7 @@ export default function Home() {
     {notice && <div className={`notice ${notice.type}`} role="status">{notice.text}</div>}
     <section className="registration-card">
       <aside className={`hero ${game}`}>
-        <div className="brand"><span>CZ</span> CARD ZONE <small>TCG</small></div>
+        <div className="brand"><img className="brand-icon" src="/images/icon-tcg.png" alt="Card Zone TCG" /> CARD ZONE <small>TCG</small></div>
         <p className="eyebrow">{copy.name}</p>
         <h1>{copy.title}</h1>
         <button className="change-game" onClick={() => chooseGame(game === 'onepiece' ? 'pokemon' : 'onepiece')}>Ganti jenis TCG</button>
