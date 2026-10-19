@@ -60,7 +60,7 @@
               <input type="text" name="fullName" placeholder="Masukkan nama lengkap" required />
             </label>
             <label>Nama Panggilan / Player Name
-              <input type="text" name="playerName" placeholder="Contoh: LuffySenpai" />
+              <input type="text" name="playerName" placeholder="Contoh: LuffySenpai" required />
             </label>
           </div>
           <div class="form-grid">
@@ -72,7 +72,7 @@
             </label>
           </div>
           <label>Domisili / Komunitas TCG
-            <input type="text" name="community" placeholder="Contoh: Yogyakarta / Jogja OP Players" />
+            <input type="text" name="community" placeholder="Contoh: Yogyakarta / Jogja OP Players" required />
           </label>
           <div class="form-grid deck-fields">
             <label><span id="leader-label">Leader yang Akan Digunakan <i>*</i></span>
@@ -131,23 +131,6 @@
       });
     });
 
-    function emailAlreadyRegistered(email, game) {
-      return new Promise((resolve) => {
-        const callback = 'cardZoneEmailCheck';
-        const script = document.createElement('script');
-        const finish = (duplicate) => {
-          delete window[callback];
-          script.remove();
-          resolve(duplicate);
-        };
-        window[callback] = (result) => finish(Boolean(result.duplicate));
-        script.onerror = () => finish(false);
-        script.src = `${SHEETS_WEB_APP_URL}?action=check-email&email=${encodeURIComponent(email)}&game=${encodeURIComponent(game)}&callback=${callback}`;
-        document.head.appendChild(script);
-        setTimeout(() => finish(false), 8000);
-      });
-    }
-
     form.addEventListener('submit', async function (event) {
       event.preventDefault();
       if (SHEETS_WEB_APP_URL.startsWith('PASTE_')) {
@@ -157,26 +140,25 @@
         return;
       }
 
-      const email = form.elements.email.value;
-      const game = form.elements.game.value;
-      if (await emailAlreadyRegistered(email, game)) {
-        toast.textContent = 'Email ini sudah terdaftar untuk jenis TCG yang dipilih.';
-        toast.classList.add('show');
-        form.elements.email.focus();
-        setTimeout(() => toast.classList.remove('show'), 3500);
-        return;
-      }
-
       const button = form.querySelector('button');
       button.disabled = true;
       button.textContent = 'MENGIRIM...';
       try {
-        // no-cors diperlukan untuk mengirim dari static site ke Google Apps Script.
-        await fetch(SHEETS_WEB_APP_URL, {
+        // Satu request langsung ke Apps Script: validasi dan simpan dijalankan bersamaan.
+        const response = await fetch(SHEETS_WEB_APP_URL, {
           method: 'POST',
-          mode: 'no-cors',
           body: new URLSearchParams(new FormData(form))
         });
+        const result = await response.json();
+        if (result.duplicate && (result.duplicate.email || result.duplicate.phone)) {
+          const field = result.duplicate.phone ? 'phone' : 'email';
+          toast.textContent = result.duplicate.phone
+            ? 'Nomor WhatsApp ini sudah terdaftar untuk jenis TCG yang dipilih.'
+            : 'Email ini sudah terdaftar untuk jenis TCG yang dipilih.';
+          form.elements[field].focus();
+          return;
+        }
+        if (!result.ok) throw new Error(result.message || 'Pendaftaran tidak dapat diproses.');
         form.reset();
         toast.textContent = 'Pendaftaran terkirim! Panitia akan menghubungi kamu via WhatsApp.';
       } catch (error) {
