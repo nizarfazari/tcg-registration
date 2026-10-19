@@ -1,12 +1,12 @@
 'use client';
 
-import { FormEvent, useState, type InputHTMLAttributes } from 'react';
+import { FormEvent, useEffect, useState, type InputHTMLAttributes } from 'react';
 
 type Game = 'onepiece' | 'pokemon';
 type Notice = { type: 'success' | 'error'; text: string } | null;
 
 const gameCopy = {
-  onepiece: { name: 'One Piece Card Game', title: 'PREVIEW TOURNAMENT', leader: 'Leader yang Akan Digunakan', leaderPlaceholder: 'Contoh: Monkey D. Luffy (OP05-060)' },
+  onepiece: { name: 'One Piece Card Game', title: 'ONE PIECE TOURNAMENT', leader: 'Leader yang Akan Digunakan', leaderPlaceholder: 'Contoh: Monkey D. Luffy (OP05-060)' },
   pokemon: { name: 'Pokémon Trading Card Game', title: 'POKÉMON TOURNAMENT', leader: 'Pokémon Utama yang Akan Digunakan', leaderPlaceholder: 'Contoh: Charizard ex' }
 };
 
@@ -14,9 +14,24 @@ export default function Home() {
   const [game, setGame] = useState<Game | null>(null);
   const [notice, setNotice] = useState<Notice>(null);
   const [sending, setSending] = useState(false);
+  const [closedGames, setClosedGames] = useState<Record<Game, boolean>>({ onepiece: false, pokemon: false });
   const copy = game ? gameCopy[game] : null;
 
+  useEffect(() => {
+    (['onepiece', 'pokemon'] as Game[]).forEach(async (gameType) => {
+      try {
+        const response = await fetch(`/api/registrations?game=${gameType}`);
+        const result = await response.json();
+        if (response.ok) setClosedGames((current) => ({ ...current, [gameType]: Boolean(result.closed) }));
+      } catch { /* Server tetap memvalidasi kuota saat submit. */ }
+    });
+  }, []);
+
   function chooseGame(selectedGame: Game) {
+    if (closedGames[selectedGame]) {
+      setNotice({ type: 'error', text: `Pendaftaran ${gameCopy[selectedGame].name} sudah ditutup karena kuota 24 peserta terpenuhi.` });
+      return;
+    }
     setGame(selectedGame);
     setNotice(null);
   }
@@ -49,6 +64,7 @@ export default function Home() {
 
   if (!game || !copy) {
     return <main className="game-gate">
+      {notice && <div className={`notice ${notice.type}`} role="status">{notice.text}</div>}
       <section className="gate-copy">
         <div className="brand"><span>CZ</span> CARD ZONE <small>TCG</small></div>
         <p className="eyebrow">REGISTRATION FORM</p>
@@ -56,11 +72,11 @@ export default function Home() {
         <p className="muted">Pilih satu permainan untuk melanjutkan ke formulir pendaftaran.</p>
       </section>
       <section className="game-options" aria-label="Pilih jenis TCG">
-        <button className="game-option one-piece" onClick={() => chooseGame('onepiece')}>
-          <span><b>ONE PIECE</b><small>Card Game</small><em>Daftar turnamen →</em></span>
+        <button className="game-option one-piece" onClick={() => chooseGame('onepiece')} disabled={closedGames.onepiece}>
+          <span><b>ONE PIECE</b><small>Card Game</small><em>{closedGames.onepiece ? 'Pendaftaran ditutup — kuota penuh' : 'Daftar turnamen →'}</em></span>
         </button>
-        <button className="game-option pokemon" onClick={() => chooseGame('pokemon')}>
-          <span><b>POKÉMON</b><small>Trading Card Game</small><em>Daftar turnamen →</em></span>
+        <button className="game-option pokemon" onClick={() => chooseGame('pokemon')} disabled={closedGames.pokemon}>
+          <span><b>POKÉMON</b><small>Trading Card Game</small><em>{closedGames.pokemon ? 'Pendaftaran ditutup — kuota penuh' : 'Daftar turnamen →'}</em></span>
         </button>
       </section>
     </main>;
@@ -79,7 +95,7 @@ export default function Home() {
         <p className="kicker">PENDAFTARAN PESERTA</p>
         <h2>{game === 'onepiece' ? 'Join the crew, Nakama!' : 'Catch your next victory!'}</h2>
         <p className="intro">Isi seluruh data dengan benar. Panitia akan menghubungi kamu melalui WhatsApp untuk konfirmasi slot.</p>
-        <div className="event-info"><span>📅</span><p><b>Jumat, 6 November 2026</b><small>13.00 – 18.00 WIB</small></p><span>📍</span><p><b>Card Zone TCG</b><small>Lantai 2 Sender Coffee, Demangan</small></p></div>
+        <div className="event-info"><span>📅</span><p><b>Jumat, 6 November 2026</b><small>13.00 – 18.00 WIB</small></p><span>📍</span><p><b>Card Zone TCG</b><small>Lantai 2 Sender Coffee, Demangan</small></p>{game === 'onepiece' ? <div className="prizes"><b>🏆 Tournament Prizes</b><span>Champion: 1 Booster Box EB-05 + Brand Kit Card Zone</span><span>Runner Up: 5 Pack OP-17 + Deck Box + Playmat + Brand Kit Card Zone</span><span>3rd Place: Sleeve + Playmat + Brand Kit Card Zone</span></div> : <div className="prizes"><b>🏆 Tournament Prizes</b><span>Champion: 1 Box Pokémon 30th Anniversary Indonesia + Brand Kit Card Zone</span><span>Runner Up: Playmat + Deck Box + Brand Kit Card Zone</span><span>3rd Place: Deck Box + Sleeve + Brand Kit Card Zone</span></div>}</div>
         <form onSubmit={submit}>
           <div className="two-columns"><Field label="Nama Lengkap" name="fullName" placeholder="Masukkan nama lengkap" /><Field label="Nama Panggilan / Player Name" name="playerName" placeholder="Contoh: LuffySenpai" /></div>
           <div className="two-columns"><Field label="Nomor WhatsApp Aktif" name="phone" type="tel" placeholder="Contoh: 081234567890" inputMode="numeric" pattern="[0-9]{10,15}" maxLength={15} onInput={(event) => { event.currentTarget.value = event.currentTarget.value.replace(/\D/g, ''); }} /><Field label="Email Aktif" name="email" type="email" placeholder="Contoh: nama@email.com" /></div>
