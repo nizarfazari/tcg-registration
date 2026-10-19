@@ -49,11 +49,10 @@ function isDuplicateEmail_(email, game) {
   const rows = sheet.getDataRange().getDisplayValues();
   if (rows.length < 2) return false;
   const headers = rows[0].map(String);
-  const emailColumn = headers.indexOf('Email');
-  const gameColumn = headers.indexOf('Jenis TCG');
-  if (emailColumn < 0 || gameColumn < 0) {
-    throw new Error('Header kolom Email atau Jenis TCG belum ditemukan.');
-  }
+  // Email dan Jenis TCG ditambahkan script pada kolom J dan K. Jika header
+  // sudah dibuat, cari berdasarkan namanya; jika belum, gunakan posisi tersebut.
+  const emailColumn = headers.indexOf('Email') >= 0 ? headers.indexOf('Email') : 9;
+  const gameColumn = headers.indexOf('Jenis TCG') >= 0 ? headers.indexOf('Jenis TCG') : 10;
   return rows.slice(1).some((row) =>
     String(row[emailColumn] || '').trim().toLowerCase() === normalizedEmail &&
     String(row[gameColumn] || '').trim().toLowerCase() === normalizedGame

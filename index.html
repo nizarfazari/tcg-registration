@@ -65,7 +65,7 @@
           </div>
           <div class="form-grid">
             <label>Nomor WhatsApp Aktif <i>*</i>
-              <input type="tel" name="phone" placeholder="Contoh: 0812 3456 7890" autocomplete="tel" required />
+              <input type="tel" name="phone" id="phone" placeholder="Contoh: 081234567890" autocomplete="tel" inputmode="numeric" pattern="[0-9]{10,15}" minlength="10" maxlength="15" title="Nomor WhatsApp harus berisi 10–15 digit angka." required />
             </label>
             <label>Email Aktif <i>*</i>
               <input type="email" name="email" placeholder="Contoh: nama@email.com" autocomplete="email" required />
@@ -106,6 +106,11 @@
     const SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbziWAKY4acATWEfjXxEUGs6ZpjNqLDI-7kxNQh5L0XJZrRqeGkNqL5H5bO47U9JabEv/exec';
     const form = document.getElementById('registration-form');
     const toast = document.getElementById('toast');
+    const phoneInput = document.getElementById('phone');
+    // Hanya angka yang boleh diketik pada nomor WhatsApp.
+    phoneInput.addEventListener('input', () => {
+      phoneInput.value = phoneInput.value.replace(/\D/g, '');
+    });
     const gameSettings = {
       onepiece: { name: 'ONE PIECE CARD GAME', title: 'PREVIEW<br><em>TOURNAMENT</em>', leader: 'Leader yang Akan Digunakan <i>*</i>', placeholder: 'Contoh: Monkey D. Luffy (OP05-060)' },
       pokemon: { name: 'POKÉMON TRADING CARD GAME', title: 'POKÉMON<br><em>TOURNAMENT</em>', leader: 'Pokémon Utama yang Akan Digunakan <i>*</i>', placeholder: 'Contoh: Charizard ex' }

@@ -299,6 +299,31 @@ body[data-game="pokemon"] .hero {
   border-radius: 7px
 }
 
+/* Prominent submission alert */
+.toast {
+  top: 26px;
+  bottom: auto;
+  width: min(480px, calc(100vw - 32px));
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  padding: 15px 20px 15px 23px;
+  border: 1px solid #ffffff30;
+  border-left: 5px solid #ffd335;
+  border-radius: 10px;
+  background: #17213c;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  box-shadow: 0 15px 38px #0007;
+  transform: translate(-50%, -120px)
+}
+
+.toast.show {
+  transform: translate(-50%, 0)
+}
+
 @media(max-width:760px) {
   .game-gate {
     display: block;
