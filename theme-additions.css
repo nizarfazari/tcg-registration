@@ -106,11 +106,11 @@ body:not(.game-selected) .page-shell {
 }
 
 .onepiece-option {
-  background-image: linear-gradient(0deg, #06162ddb 0%, transparent 65%), url('images/background_square.png')
+  background-image: linear-gradient(0deg, #06162ddb 0%, transparent 65%), url('images/background_square.webp')
 }
 
 .pokemon-option {
-  background-image: linear-gradient(0deg, #06162ddb 0%, transparent 65%), url('images/background_square_pokemon.png')
+  background-image: linear-gradient(0deg, #06162ddb 0%, transparent 65%), url('images/background_square_pokemon.webp')
 }
 
 .game-option-content {
@@ -154,7 +154,7 @@ body.game-selected .game-gate {
 }
 
 .hero {
-  background: #193373 url('images/background_2.png') center/cover no-repeat
+  background: #193373 url('images/background_2.webp') center/cover no-repeat
 }
 
 .hero-grid,
@@ -164,7 +164,7 @@ body.game-selected .game-gate {
 }
 
 body[data-game="pokemon"] .hero {
-  background-image: url('images/background_1.png')
+  background-image: url('images/background_1.webp')
 }
 
 .hero .brand,
