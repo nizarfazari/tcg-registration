@@ -1,0 +1,333 @@
+/* A game must be selected before the registration form is displayed. */
+body:not(.game-selected) .page-shell {
+  display: none
+}
+
+.game-gate {
+  min-height: 100vh;
+  padding: 56px max(28px, calc((100vw - 1120px)/2));
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 72px;
+  align-items: center;
+  background: #111c38;
+  color: #fff;
+  position: relative;
+  overflow: hidden
+}
+
+.game-gate:before {
+  content: "";
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  border: 110px solid #244887;
+  border-radius: 50%;
+  left: -470px;
+  bottom: -430px
+}
+
+.gate-intro {
+  position: relative
+}
+
+.gate-brand {
+  font: 700 20px 'Space Grotesk';
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 8px
+}
+
+.gate-brand>span {
+  font-size: 12px;
+  line-height: 31px;
+  text-align: center;
+  width: 31px;
+  height: 31px;
+  border: 2px solid #ffd335;
+  color: #ffd335;
+  transform: rotate(-7deg)
+}
+
+.gate-brand small {
+  font-size: 10px;
+  background: #ffd335;
+  color: #17213c;
+  padding: 3px 5px;
+  border-radius: 3px
+}
+
+.gate-intro>p {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #ffd335;
+  font-weight: bold;
+  margin: 80px 0 11px
+}
+
+.gate-intro h1 {
+  font: 700 43px/.98 'Space Grotesk';
+  letter-spacing: -2px;
+  margin: 0 0 18px
+}
+
+.gate-intro>span {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #b8c7ec
+}
+
+.game-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 22px;
+  position: relative
+}
+
+.game-option {
+  height: 490px;
+  padding: 0;
+  border: 0;
+  border-radius: 15px;
+  overflow: hidden;
+  text-align: left;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  box-shadow: 0 20px 35px #0007;
+  transition: transform .25s, box-shadow .25s
+}
+
+.game-option:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 28px 45px #0009
+}
+
+.onepiece-option {
+  background-image: linear-gradient(0deg, #06162ddb 0%, transparent 65%), url('images/background_square.png')
+}
+
+.pokemon-option {
+  background-image: linear-gradient(0deg, #06162ddb 0%, transparent 65%), url('images/background_square_pokemon.png')
+}
+
+.game-option-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  color: #fff;
+  display: flex;
+  flex-direction: column
+}
+
+.game-option b {
+  font: 700 31px/1 'Space Grotesk';
+  letter-spacing: -1px
+}
+
+.game-option small {
+  font-size: 13px;
+  margin-top: 4px;
+  color: #dbe7ff
+}
+
+.game-option em {
+  font-style: normal;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: .7px;
+  color: #ffd335;
+  margin-top: 20px
+}
+
+.game-option:hover em {
+  transform: translateX(5px);
+  transition: .2s
+}
+
+body.game-selected .game-gate {
+  display: none
+}
+
+.hero {
+  background: #193373 url('images/background_2.png') center/cover no-repeat
+}
+
+.hero-grid,
+.hero:before,
+.hero:after {
+  display: none
+}
+
+body[data-game="pokemon"] .hero {
+  background-image: url('images/background_1.png')
+}
+
+.hero .brand,
+.hero .eyebrow,
+.hero h1,
+.hero-footer {
+  filter: drop-shadow(0 2px 3px #000)
+}
+
+/* Match the registration page with the dark Card Zone landing background. */
+.page-shell {
+  background: #111c38
+}
+
+.registration-card {
+  box-shadow: 0 24px 65px #0008
+}
+
+/* Form field refinement */
+#registration-form {
+  gap: 19px
+}
+
+#registration-form label {
+  display: block;
+  color: #293651;
+  letter-spacing: .05px
+}
+
+#registration-form input[type="text"],
+#registration-form input[type="tel"],
+#registration-form input[type="email"] {
+  display: block;
+  width: 100%;
+  height: 43px;
+  margin-top: 7px;
+  padding: 0 13px;
+  border: 1px solid #d9dfeb;
+  border-radius: 7px;
+  background: #fff;
+  color: #17213c;
+  font: 400 13px 'DM Sans';
+  outline: 0;
+  transition: border-color .18s, box-shadow .18s
+}
+
+#registration-form input::placeholder {
+  color: #a3adbe
+}
+
+#registration-form input:focus {
+  border-color: #2f5bea;
+  box-shadow: 0 0 0 3px #2f5bea1a
+}
+
+#registration-form .form-grid {
+  align-items: start
+}
+
+#registration-form .deck-fields {
+  grid-template-columns: 1fr
+}
+
+#registration-form fieldset {
+  margin: 3px 0 0;
+  padding: 0;
+  border: 0;
+  background: transparent
+}
+
+#registration-form fieldset legend {
+  width: 100%;
+  padding: 0;
+  margin: 0 0 9px;
+  color: #293651;
+  font-size: 12px;
+  line-height: 1.3
+}
+
+.option-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  margin: 0
+}
+
+#registration-form .option-row .choice {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 0 11px;
+  border: 1px solid #dce3f0;
+  border-radius: 6px;
+  background: #fff;
+  transition: border-color .18s, background .18s
+}
+
+.option-row .choice:hover {
+  border-color: #99afea
+}
+
+.option-row .choice:has(input:checked) {
+  border-color: #2f5bea;
+  background: #eef3ff;
+  color: #2348be
+}
+
+.helper {
+  line-height: 1.35
+}
+
+#registration-form .consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 11px 12px;
+  border-radius: 7px;
+  background: #f7f9fd
+}
+
+#registration-form .consent .check {
+  margin-top: 1px
+}
+
+.required-note {
+  margin-top: -10px
+}
+
+#registration-form button {
+  height: 47px;
+  border-radius: 7px
+}
+
+@media(max-width:760px) {
+  .game-gate {
+    display: block;
+    padding: 38px 23px
+  }
+
+  .gate-intro>p {
+    margin-top: 48px
+  }
+
+  .gate-intro h1 {
+    font-size: 36px
+  }
+
+  .game-options {
+    grid-template-columns: 1fr;
+    margin-top: 37px;
+    gap: 15px
+  }
+
+  .game-option {
+    height: 260px
+  }
+
+  .game-option b {
+    font-size: 26px
+  }
+
+  .option-row {
+    grid-template-columns: 1fr
+  }
+}

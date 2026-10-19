@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Card Zone TCG — Registration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="theme-additions.css" />
+</head>
+<body>
+  <section class="game-gate" aria-labelledby="game-choice-title">
+    <div class="gate-intro">
+      <div class="gate-brand"><span>CZ</span> CARD ZONE <small>TCG</small></div>
+      <p>REGISTRATION FORM</p>
+      <h1 id="game-choice-title">Pilih TCG<br>untuk turnamenmu</h1>
+      <span>Pilih satu permainan sebelum melanjutkan pengisian data.</span>
+    </div>
+    <div class="game-options">
+      <button class="game-option onepiece-option" type="button" data-game="onepiece">
+        <span class="game-option-content"><b>ONE PIECE</b><small>Card Game</small><em>Daftar turnamen →</em></span>
+      </button>
+      <button class="game-option pokemon-option" type="button" data-game="pokemon">
+        <span class="game-option-content"><b>POKÉMON</b><small>Trading Card Game</small><em>Daftar turnamen →</em></span>
+      </button>
+    </div>
+  </section>
+  <main class="page-shell">
+    <section class="registration-card" aria-labelledby="form-title">
+      <div class="hero">
+        <div class="hero-grid"></div>
+        <div class="brand"><span class="brand-mark">CZ</span> CARD ZONE <small>TCG</small></div>
+        <p class="eyebrow" id="game-name">ONE PIECE CARD GAME</p>
+        <h1 id="form-title">PREVIEW<br><em>TOURNAMENT</em></h1>
+        <div class="hero-footer">
+          <span>🏴‍☠️ READY TO SET SAIL?</span>
+          <span>06.11.2026</span>
+        </div>
+      </div>
+
+      <div class="content">
+        <header class="content-header">
+          <p class="kicker">PENDAFTARAN PESERTA</p>
+          <h2>Join the crew, Nakama!</h2>
+          <p>Isi data di bawah dengan benar. Panitia akan menghubungi kamu melalui WhatsApp untuk konfirmasi slot.</p>
+        </header>
+
+        <aside class="event-info" aria-label="Informasi turnamen">
+          <div><span class="event-icon">📅</span><p><b>Jumat, 6 November 2026</b><small>13.00 – 18.00 WIB</small></p></div>
+          <div><span class="event-icon">📍</span><p><b>Card Zone TCG</b><small>Lantai 2 Sender Coffee, Demangan</small></p></div>
+          <div class="free"><span>GRATIS</span><p><b>Biaya Pendaftaran</b><small>Slot terbatas — segera daftar!</small></p></div>
+        </aside>
+
+        <form id="registration-form">
+          <input type="hidden" name="game" id="selected-game" />
+          <div class="form-grid">
+            <label>Nama Lengkap <i>*</i>
+              <input type="text" name="fullName" placeholder="Masukkan nama lengkap" required />
+            </label>
+            <label>Nama Panggilan / Player Name
+              <input type="text" name="playerName" placeholder="Contoh: LuffySenpai" />
+            </label>
+          </div>
+          <div class="form-grid">
+            <label>Nomor WhatsApp Aktif <i>*</i>
+              <input type="tel" name="phone" placeholder="Contoh: 0812 3456 7890" autocomplete="tel" required />
+            </label>
+            <label>Email Aktif <i>*</i>
+              <input type="email" name="email" placeholder="Contoh: nama@email.com" autocomplete="email" required />
+            </label>
+          </div>
+          <label>Domisili / Komunitas TCG
+            <input type="text" name="community" placeholder="Contoh: Yogyakarta / Jogja OP Players" />
+          </label>
+          <div class="form-grid deck-fields">
+            <label><span id="leader-label">Leader yang Akan Digunakan <i>*</i></span>
+              <input type="text" name="leader" id="leader-input" placeholder="Contoh: Monkey D. Luffy (OP05-060)" required />
+              <small class="helper">Kode kartu boleh ditambahkan jika diketahui.</small>
+            </label>
+            <label>Nama / Tipe Deck <i>*</i>
+              <input type="text" name="deck" placeholder="Contoh: Purple Luffy Ramp" required />
+            </label>
+          </div>
+
+          <fieldset>
+            <legend>Apakah kamu memiliki deck sendiri untuk turnamen? <i>*</i></legend>
+            <div class="option-row">
+              <label class="choice"><input type="radio" name="hasDeck" value="ready" required /><span class="radio"></span>Ya, sudah siap</label>
+              <label class="choice"><input type="radio" name="hasDeck" value="preparing" /><span class="radio"></span>Sedang mempersiapkan deck</label>
+            </div>
+          </fieldset>
+
+          <label class="consent"><input type="checkbox" required /><span class="check"></span><span>Saya bersedia hadir sesuai jadwal, mengikuti ketentuan panitia, dan menerima informasi terkait turnamen melalui WhatsApp.</span></label>
+          <p class="required-note"><i>*</i> Wajib diisi</p>
+          <button type="submit">KIRIM PENDAFTARAN <span>→</span></button>
+          <p class="form-notice">Data pendaftaran akan dikirim ke panitia untuk diproses.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+  <div class="toast" id="toast" role="status">Tampilan form berhasil dicek — penyimpanan data belum diaktifkan.</div>
+  <script>
+    // Ganti dengan URL Web App Google Apps Script setelah script dideploy.
+    const SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbziWAKY4acATWEfjXxEUGs6ZpjNqLDI-7kxNQh5L0XJZrRqeGkNqL5H5bO47U9JabEv/exec';
+    const form = document.getElementById('registration-form');
+    const toast = document.getElementById('toast');
+    const gameSettings = {
+      onepiece: { name: 'ONE PIECE CARD GAME', title: 'PREVIEW<br><em>TOURNAMENT</em>', leader: 'Leader yang Akan Digunakan <i>*</i>', placeholder: 'Contoh: Monkey D. Luffy (OP05-060)' },
+      pokemon: { name: 'POKÉMON TRADING CARD GAME', title: 'POKÉMON<br><em>TOURNAMENT</em>', leader: 'Pokémon Utama yang Akan Digunakan <i>*</i>', placeholder: 'Contoh: Charizard ex' }
+    };
+
+    document.querySelectorAll('.game-option').forEach((option) => {
+      option.addEventListener('click', () => {
+        const game = option.dataset.game;
+        const setting = gameSettings[game];
+        document.body.dataset.game = game;
+        document.body.classList.add('game-selected');
+        document.getElementById('game-name').textContent = setting.name;
+        document.getElementById('selected-game').value = setting.name;
+        document.getElementById('form-title').innerHTML = setting.title;
+        document.getElementById('leader-label').innerHTML = setting.leader;
+        document.getElementById('leader-input').placeholder = setting.placeholder;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    function emailAlreadyRegistered(email, game) {
+      return new Promise((resolve) => {
+        const callback = 'cardZoneEmailCheck';
+        const script = document.createElement('script');
+        const finish = (duplicate) => {
+          delete window[callback];
+          script.remove();
+          resolve(duplicate);
+        };
+        window[callback] = (result) => finish(Boolean(result.duplicate));
+        script.onerror = () => finish(false);
+        script.src = `${SHEETS_WEB_APP_URL}?action=check-email&email=${encodeURIComponent(email)}&game=${encodeURIComponent(game)}&callback=${callback}`;
+        document.head.appendChild(script);
+        setTimeout(() => finish(false), 8000);
+      });
+    }
+
+    form.addEventListener('submit', async function (event) {
+      event.preventDefault();
+      if (SHEETS_WEB_APP_URL.startsWith('PASTE_')) {
+        toast.textContent = 'URL Google Apps Script belum dipasang. Lihat petunjuk deployment.';
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3500);
+        return;
+      }
+
+      const email = form.elements.email.value;
+      const game = form.elements.game.value;
+      if (await emailAlreadyRegistered(email, game)) {
+        toast.textContent = 'Email ini sudah terdaftar untuk jenis TCG yang dipilih.';
+        toast.classList.add('show');
+        form.elements.email.focus();
+        setTimeout(() => toast.classList.remove('show'), 3500);
+        return;
+      }
+
+      const button = form.querySelector('button');
+      button.disabled = true;
+      button.textContent = 'MENGIRIM...';
+      try {
+        // no-cors diperlukan untuk mengirim dari static site ke Google Apps Script.
+        await fetch(SHEETS_WEB_APP_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: new URLSearchParams(new FormData(form))
+        });
+        form.reset();
+        toast.textContent = 'Pendaftaran terkirim! Panitia akan menghubungi kamu via WhatsApp.';
+      } catch (error) {
+        toast.textContent = 'Gagal mengirim. Coba lagi beberapa saat.';
+      } finally {
+        button.disabled = false;
+        button.innerHTML = 'KIRIM PENDAFTARAN <span>→</span>';
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3500);
+      }
+    });
+  </script>
+</body>
+</html>
